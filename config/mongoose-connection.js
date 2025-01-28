@@ -1,11 +1,18 @@
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb://127.0.0.1:27017/scatch")
+const dbgr = require('debug')("development:mongoose") //creating a debugger
+
+const config = require('config')
+
+
+
+//after above line run the commnad - "$env:DEBUG="development:*" ,it means  "development:" wale saare namespace ke messages show karna
+mongoose.connect(`${config.get("MONGODB_URI")}/scatch`)
 .then(() => {
-    console.log("connected successfully to db")
+    dbgr("connected successfully to db")
 })
 .catch((err) => {
-    console.log(err)
+    dbgr(err)
 })
 
 module.exports = mongoose.connection //authority of the connection
