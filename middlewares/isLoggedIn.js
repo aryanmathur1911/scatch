@@ -8,11 +8,11 @@ const isLoggedIn = async (req,res,next) => {
     }
 
     try {
-    let decoded = jwt.verify(req.cookies.token,process.env.JWT_KEY)
+    let data = jwt.verify(req.cookies.token,process.env.JWT_KEY)
 
-    let user = await userModel.findOne({email:decoded.email}).select("-password")
+    // let user = await userModel.findOne({email:decoded.email}).select("-password")
 
-    req.user = user
+    req.user = data
 
     next()
 

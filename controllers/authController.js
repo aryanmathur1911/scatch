@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const  generateToken  = require("../utils/generateToken.js")
 const cookieParser = require("cookie-parser")
+const isAdmin = require("../middlewares/isAdmin")
 
 
 const registerUser = async (req, res) => {
@@ -40,6 +41,8 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
+
+    
 
     try {
         // Find the user by email
