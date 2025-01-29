@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const adminModel = require("./models/adminmodel");
+const userModel = require("./models/usermodel");
 const bcrypt = require("bcrypt");
 const dotenv = require('dotenv');
 const db = require("./config/mongoose-connection.js");
@@ -12,16 +12,17 @@ const createAdmin = async () => {
         const password = "batman";
 
         const salt = await bcrypt.genSalt(10);
-        const user = await adminModel.findOne({ email });
+        const user = await userModel.findOne({ email });
 
         if (user) {
             console.log("Already existing admin");
         } else {
             const hash = await bcrypt.hash(password, salt);
-            const createdAdmin = await adminModel.create({
+            const createdAdmin = await userModel.create({
                 username: username,
                 email: email,
-                password: hash 
+                password: hash ,
+                isAdmin : true
             });
             console.log(createdAdmin);
         }

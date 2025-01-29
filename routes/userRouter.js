@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken")
 const {registerUser,loginUser, logout } = require("../controllers/authController")
 const isLoggedIn = require("../middlewares/isLoggedIn")
 const cookieParser = require("cookie-parser")
-const isAdmin = require("../middlewares/isAdmin")
 
 router.use(cookieParser())
 
@@ -18,7 +17,7 @@ router.get('/',(req,res) => {
 })
 
 router.post('/register',registerUser)
-router.post('/login',isAdmin,loginUser)
+router.post('/login',loginUser)
 router.get("/logout",logout)
 
 

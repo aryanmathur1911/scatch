@@ -12,7 +12,10 @@ const userSchema = mongoose.Schema({
         ref : "product"
     }],
 
-    isAdmin : Boolean,
+    isAdmin : {
+        type : Boolean,
+        default : false
+    },
 
     orders : {
         type : Array,

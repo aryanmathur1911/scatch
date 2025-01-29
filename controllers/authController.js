@@ -3,11 +3,10 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const  generateToken  = require("../utils/generateToken.js")
 const cookieParser = require("cookie-parser")
-const isAdmin = require("../middlewares/isAdmin")
 
 
 const registerUser = async (req, res) => {
-    let { fullname, email, password } = req.body
+    let { fullname, email, password, isAdmin } = req.body
 
     let user = await userModel.findOne({ email })
 
@@ -23,12 +22,14 @@ const registerUser = async (req, res) => {
                         fullname,
                         email,
                         password: hash,
+                        isAdmin
                     })
 
                     let token = generateToken(user)
                     res.cookie("token", token)
 
-                    res.status(201).send("user created successfully")
+                    // res.status(201).send("user created successfully")
+                    res.redirect("/")
                 }
                 catch (err) {
                     res.send(err)
@@ -50,6 +51,7 @@ const loginUser = async (req, res) => {
         if (!user) {
             return res.status(403).send("Email or password incorrect");
         }
+        
 
         // Compare the input password with the hashed password
         bcrypt.compare(password, user.password, (err, result) => {
@@ -57,10 +59,14 @@ const loginUser = async (req, res) => {
                 return res.status(500).send("Error comparing passwords");
             }
 
+            
             if (result) {
                 // Generate a token
                 const token = generateToken(user);
                 res.cookie("token", token);
+                if(user.isAdmin){
+                    return res.render("adminPage.ejs", { admin: user });
+                }
 
                 return res.redirect("/shop");
             } else {
